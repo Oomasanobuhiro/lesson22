@@ -1,4 +1,4 @@
-<div class="mt-4">
+<!-- <div class="mt-4">
     @if (isset($microposts))
         <ul class="list-none">
             @foreach ($microposts as $micropost)
@@ -20,7 +20,6 @@
                             <p class="mb-0">{!! nl2br(e($micropost->content)) !!}</p>
                         </div>
                         <div>
-                            @include('user_favorite.favorite_button')
                             @if (Auth::id() == $micropost->user_id)
                                 {{-- 投稿削除ボタンのフォーム --}}
                                 <form method="POST" action="{{ route('microposts.destroy', $micropost->id) }}">
@@ -33,11 +32,10 @@
                         </div>
                     </div>
                 </li>
-
+                @include('user_favorite.favorite_button',['micropost' => $micropost])
             @endforeach
         </ul>
         {{-- ページネーションのリンク --}}
         {{ $microposts->links() }}
     @endif
-</div>
-
+</div> -->

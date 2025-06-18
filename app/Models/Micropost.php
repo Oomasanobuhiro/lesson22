@@ -18,4 +18,9 @@ class Micropost extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function favoriteUser()
+    {
+        return $this->belongsToMany(User::class, 'favorite', 'post_id', 'user_id')->withTimestamps();
+    }
 }

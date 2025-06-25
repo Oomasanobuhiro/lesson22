@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Models\Micropost;
 
+use App\Models\Anime;
+
+use App\Models\Review;
+
 class MicropostsController extends Controller
 {
     public function index()
@@ -17,9 +21,23 @@ class MicropostsController extends Controller
             // ユーザーの投稿の一覧を作成日時の降順で取得
             // （後のChapterで他ユーザーの投稿も取得するように変更しますが、現時点ではこのユーザーの投稿のみ取得します）
             $microposts = $user->feed_microposts()->orderBy('created_at', 'desc')->paginate(10);
+
+            $animesall = Anime::all();
+            // $ranking = Anime::withCount('reviews')->orderBy('reviews_count','desc')->take(3)->get();
+            $ranking = Anime::withSum('reviews','rating')->orderBy('reviews_sum_rating','desc')->take(3)->get();
+            $newanimes = Anime::withCount('reviews')->latest()->take(10)->get();
+            $recommended = Anime::withSum('reviews','rating')->inRandomOrder()->take(3)->get();
+
+            $reviews = Review::all();
+
             $data = [
                 'user' => $user,
                 'microposts' => $microposts,
+                'animesall' => $animesall,
+                'ranking' => $ranking,
+                'newanimes' => $newanimes,
+                'recommended' => $recommended,
+                'reviews' => $reviews,
             ];
         }
 

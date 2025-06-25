@@ -153,4 +153,15 @@ class User extends Authenticatable
     {
         return $this->favoritePost()->where('post_id', $postId)->exists();
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
+
 }

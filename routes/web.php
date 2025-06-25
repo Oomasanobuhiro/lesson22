@@ -7,6 +7,8 @@ use App\Http\Controllers\UsersController; // 追記
 use App\Http\Controllers\MicropostsController; //追記
 use App\Http\Controllers\UserFollowController;
 use App\Http\Controllers\UserFavoriteController;  // 追記
+use App\Http\Controllers\AnimeController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,11 @@ Route::get('/', [MicropostsController::class, 'index']);
 Route::get('/dashboard', [MicropostsController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/animes/{id}', [AnimeController::class, 'show'])->name('animes.show');
+    Route::post('/animes/{id}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::resource('reviews', ReviewController::class, ['only' => ['edit', 'update','destroy']]);
+
     // 追記ここから
     Route::prefix('users/{id}')->group(function () {
         Route::post('follow', [UserFollowController::class, 'store'])->name('user.follow');
@@ -49,4 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('microposts', MicropostsController::class, ['only' => ['store', 'destroy']]);
 });
 
+Route::middleware(['auth','admin'])->group(function () {
+    Route::get('/auth/create',[AnimeController::class, 'create'])->name('animes.create');
+    Route::post('/animes',[AnimeController::class, 'store'])->name('animes.store');
+});
 require __DIR__.'/auth.php';
